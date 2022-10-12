@@ -25,8 +25,8 @@ player = {
 }
 
 enemy = {
-    "img": load_image('assets/images/ships/spaceship/Spaceship_Red64.gif'),
-    "x": random.randint(0, 800),
+    "img": load_image('assets/images/enemies/space-invader-icon.png'),
+    "x": random.randint(0, 600),
     "y": random.randint(50, 150),
     "x_change": 0.3,
     "y_change": 0
