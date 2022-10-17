@@ -33,12 +33,18 @@ enemy = {
     "x_change": 0.3,
     "y_change": 40.0
 }
+num_enemies = 6
+enemies = []
+
+for i in range(num_enemies):
+
+    enemies.append(enemy)
 
 bullet = {
     "img": load_image('assets/images/bullets/black_shoot.png'),
     "x": 0,
     "y": 480,
-    "x_change": 0.3,
+    "x_change": 0.4,
     "y_change": 10.0,
     "state": "ready"
 }
@@ -63,14 +69,24 @@ yLimit = {
 }
 
 score = 0
+font = pygame.font.Font('assets/fonts/contrast.ttf',32)
+text_x = 10
+text_y = 10
 
+def show_score(x,y):
+    score_render = font.render("Score:"+str(score),True,(255,255,255))
+    screen.blit(score_render, (x, y))
 def is_collision(enemy_x, enemy_y, bullet_x, bullet_y):
     distance = math.sqrt((math.pow(enemy_x - bullet_x, 2)) + (math.pow(enemy_y - bullet_y, 2)))
-    return False if distance < 27 else True
+    if distance < 30:
+        return True
+    else:
+        return False
 
 
 def player_screen(x, y):
-    screen.blit(player["img"], (x, y))
+    screen.blit(player["img"],
+                (x, y))
 
 
 def enemy_screen(x, y):
@@ -123,9 +139,8 @@ while running:
     player["x"] += player["x_change"]
     player["y"] += player["y_change"]
 
-    enemy["x"] += enemy["x_change"]
 
-    #Ship limit
+    # Ship limit
     if player["x"] <= 0:
         player["x"] = 0
         player["y_change"] = 0
@@ -139,15 +154,18 @@ while running:
 
     elif player["y"] >= 540:
         player["y"] = 540
+    # Enemy Movement
+    for i in enemies:
+        enemy["x"] += enemy["x_change"]
+        if enemy["x"] <= 0:
+            enemy["x_change"] = 0.1
+            enemy["y"] += enemy["y_change"]
 
-    if enemy["x"] <= 0:
-        enemy["x_change"] = 0.3
-        enemy["y"] += enemy["y_change"]
+        elif enemy["x"] >= 740:
+            enemy["x_change"] = -0.1
+            enemy["y"] += enemy["y_change"]
 
-    elif enemy["x"] >= 740:
-        enemy["x_change"] = -0.3
-        enemy["y"] += enemy["y_change"]
-
+    # Bullet Movement
     if bullet["y"] <= 0:
         bullet["y"] = 480
         bullet["state"] = "ready"
@@ -157,21 +175,24 @@ while running:
                     bullet["y"])
         bullet["y"] -= bullet["y_change"]
 
-
-    collision = is_collision(enemy["x"],enemy["y"],bullet["x"],bullet["x"])
+    collision = is_collision(enemy["x"],
+                             enemy["y"],
+                             bullet["x"],
+                             bullet["x"])
     if collision:
-        bullet["y"] = 480
-        bullet["state"]= "ready"
+        bullet["y"] = 300
+        bullet["state"] = "ready"
         score += 1
-        enemy["x"] =random.randint(0,800)
-        enemy["y"] = random.randint(50,150)
+        enemy["x"] = random.randint(0, 600)
+        enemy["y"] = random.randint(50, 150)
 
-
-    #Spawn the player
+    # Spawn the ENEMY
     enemy_screen(enemy["x"],
                  enemy["y"])
 
+    # Spawn the player
     player_screen(player["x"],
                   player["y"])
 
+    show_score(text_x,text_y)
     pygame.display.update()
