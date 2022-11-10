@@ -37,7 +37,8 @@ enemy = {
     "x_change": 0.3,
     "y_change": 40.0
 }
-num_enemies = 6
+
+num_enemies = 3
 enemies = []
 enemy_img = []
 enemy_x = []
@@ -48,10 +49,12 @@ enemy_y_change = []
 for i in range(num_enemies):
     enemies.append(enemy)
     enemy_img.append(enemy["img"])
-    enemy_x.append(enemy["x"])
-    enemy_y.append(enemy["y"])
+    enemy_x.append(random.randint(0, 600))
+    enemy_y.append(random.randint(50, 150))
     enemy_x_change.append(enemy["x_change"])
     enemy_y_change.append(enemy["y_change"])
+
+print(enemy_x)
 
 bullet = {
     "img": load_image('src/assets/images/bullets/black_shoot.png'),
