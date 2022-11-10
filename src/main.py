@@ -38,6 +38,7 @@ enemy = {
     "y_change": 40.0
 }
 num_enemies = 6
+enemies =[]
 enemy_img = []
 enemy_x = []
 enemy_y = []
@@ -45,6 +46,7 @@ enemy_x_change = []
 enemy_y_change = []
 
 for i in range(num_enemies):
+    enemies.append(enemy)
     enemy_img.append(enemy["img"])
     enemy_x.append(enemy["x"])
     enemy_y.append(enemy["y"])
@@ -146,24 +148,24 @@ def main():
                 enemy_x_change[h] = -0.3
                 enemy_y[i] += enemy_y_change[h]
 
-            collision = is_collision(enemy["x"], enemy["y"], bullet["x"], bullet["x"])
+            collision = is_collision(enemy_x[h], enemy_y[h], bullet["x"], bullet["x"])
             if collision:
                 BULLET_SOUND = mixer.Sound('src/assets/sounds/effects/explosion.wav')
                 BULLET_SOUND.play()
                 bullet["y"] = 300
                 bullet["state"] = "ready"
                 text["score"] += 1
-                enemy["x"] = random.randint(0, 600)
-                enemy["y"] = random.randint(50, 150)
+                enemy_x[h] = random.randint(0, 600)
+                enemy_y[h] = random.randint(50, 150)
 
-            if enemy["y"] > 450:
+            if enemy_y[h] > 450:
                 # Va un for para todos los enemigos
-                enemy["y"] = 2000
+                enemy_y[h] = 2000
                 game_over_text()
                 # break
 
             # Spawn the ENEMY
-            display_entity(enemy.get("img"), (enemy["x"], enemy["y"]))
+            display_entity(enemy.get("img"), (enemy_x[h], enemy_y[h]))
 
         # Bullet Movement
         if bullet["y"] <= 0:
