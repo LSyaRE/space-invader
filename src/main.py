@@ -3,8 +3,7 @@ import pygame
 import random
 from pygame import mixer
 
-from src.modules.enemies.crab import Crab
-from src.modules.events.keys_event import PLAYER_EVENT, REST_EVENT, SCREEN_EVENT, PLAYER_COLLISION_EVENT
+from src.modules.events.keys_event import PLAYER_EVENT, REST_EVENT, SCREEN_EVENT
 
 # Initialize the pygame
 pygame.init()
@@ -66,7 +65,7 @@ mixer.music.play(-1)
 
 
 def game_over_text():
-    game_over = text['font'].render(f"Game Over:{text['score']}",True,(255, 255, 255))
+    game_over = text['font'].render(f"Game Over:{text['score']}", True, (255, 255, 255))
     screen.blit(game_over, (200, 250))
 
 
