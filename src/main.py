@@ -38,10 +38,18 @@ enemy = {
     "y_change": 40.0
 }
 num_enemies = 6
-enemies = []
+enemy_img = []
+enemy_x = []
+enemy_y = []
+enemy_x_change = []
+enemy_y_change = []
 
 for i in range(num_enemies):
-    enemies.append(enemy)
+    enemy_img.append(enemy["img"])
+    enemy_x.append(enemy["x"])
+    enemy_y.append(enemy["y"])
+    enemy_x_change.append(enemy["x_change"])
+    enemy_y_change.append(enemy["y_change"])
 
 bullet = {
     "img": load_image('src/assets/images/bullets/black_shoot.png'),
@@ -127,15 +135,35 @@ def main():
             player["x"] = 740
 
         # Enemy Movement
-        enemy["x"] += enemy["x_change"]
+        for h in range(num_enemies):
+            enemy_x[h] += enemy_x_change[i]
 
-        if enemy["x"] <= 0:
-            enemy["x_change"] = 0.3
-            enemy["y"] += enemy["y_change"]
+            if enemy_x[h] <= 0:
+                enemy_x_change[i] = 0.3
+                enemy_y[h] += enemy_y_change[h]
 
-        if enemy["x"] >= 740:
-            enemy["x_change"] = -0.3
-            enemy["y"] += enemy["y_change"]
+            if enemy_x[h] >= 740:
+                enemy_x_change[h] = -0.3
+                enemy_y[i] += enemy_y_change[h]
+
+            collision = is_collision(enemy["x"], enemy["y"], bullet["x"], bullet["x"])
+            if collision:
+                BULLET_SOUND = mixer.Sound('src/assets/sounds/effects/explosion.wav')
+                BULLET_SOUND.play()
+                bullet["y"] = 300
+                bullet["state"] = "ready"
+                text["score"] += 1
+                enemy["x"] = random.randint(0, 600)
+                enemy["y"] = random.randint(50, 150)
+
+            if enemy["y"] > 450:
+                # Va un for para todos los enemigos
+                enemy["y"] = 2000
+                game_over_text()
+                # break
+
+            # Spawn the ENEMY
+            display_entity(enemy.get("img"), (enemy["x"], enemy["y"]))
 
         # Bullet Movement
         if bullet["y"] <= 0:
@@ -147,26 +175,7 @@ def main():
                         bullet["y"])
             bullet["y"] -= bullet["y_change"]
 
-        collision = is_collision(enemy["x"], enemy["y"], bullet["x"], bullet["x"])
 
-        # Game Over
-        if collision:
-            BULLET_SOUND = mixer.Sound('src/assets/sounds/effects/explosion.wav')
-            BULLET_SOUND.play()
-            bullet["y"] = 300
-            bullet["state"] = "ready"
-            text["score"] += 1
-            enemy["x"] = random.randint(0, 600)
-            enemy["y"] = random.randint(50, 150)
-
-        if enemy["y"] > 450:
-            # Va un for para todos los enemigos
-            enemy["y"] = 2000
-            game_over_text()
-            # break
-
-        # Spawn the ENEMY
-        display_entity(enemy.get("img"), (enemy["x"], enemy["y"]))
 
         # Spawn the player
         display_entity(player.get("img"), (player["x"], player["y"]))
