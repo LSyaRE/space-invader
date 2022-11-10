@@ -38,7 +38,7 @@ enemy = {
     "y_change": 40.0
 }
 num_enemies = 6
-enemies =[]
+enemies = []
 enemy_img = []
 enemy_x = []
 enemy_y = []
@@ -156,12 +156,12 @@ def main():
                 bullet["state"] = "ready"
                 text["score"] += 1
                 enemy_x[h] = random.randint(0, 600)
-                enemy_y[h] = random.randint(50, 150)
+                enemy_y[h] = random.randint(70, 150)
 
             if enemy_y[h] > 450:
-                # Va un for para todos los enemigos
-                enemy_y[h] = 2000
-                game_over_text()
+                for u in range(num_enemies):
+                    enemy_y[u] = 2000
+                    game_over_text()
                 # break
 
             # Spawn the ENEMY
@@ -176,8 +176,6 @@ def main():
             fire_bullet(bullet["x"],
                         bullet["y"])
             bullet["y"] -= bullet["y_change"]
-
-
 
         # Spawn the player
         display_entity(player.get("img"), (player["x"], player["y"]))
