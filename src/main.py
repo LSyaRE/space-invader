@@ -30,16 +30,15 @@ player = {
     "y_change": 0.0
 }
 
-enemy = {
-    "img": load_image('src/assets/images/enemies/enemy.png'),
-    "x": random.randint(0, 600),
-    "y": random.randint(50, 150),
-    "x_change": 0.3,
-    "y_change": 40.0
+enemies = {
+    "img": [],
+    "x": [],
+    "y": [],
+    "x_change": [],
+    "y_change": []
 }
 
 num_enemies = 3
-enemies = []
 enemy_img = []
 enemy_x = []
 enemy_y = []
@@ -47,12 +46,11 @@ enemy_x_change = []
 enemy_y_change = []
 
 for i in range(num_enemies):
-    enemies.append(enemy)
-    enemy_img.append(enemy["img"])
+    enemy_img.append(load_image('src/assets/images/enemies/enemy.png'))
     enemy_x.append(random.randint(0, 600))
     enemy_y.append(random.randint(50, 150))
-    enemy_x_change.append(enemy["x_change"])
-    enemy_y_change.append(enemy["y_change"])
+    enemy_x_change.append(0.3)
+    enemy_y_change.append(40.0)
 
 print(enemy_x)
 
@@ -114,25 +112,22 @@ def main():
 
             running = SCREEN_EVENT.get(event.type, True)
 
-            # if keystroke is presses check whatever its right or left
-            if event.type == pygame.KEYDOWN:
-                player["x_change"] = PLAYER_EVENT.get(event.key, 0)
+            match event.type:
+                case pygame.KEYDOWN:
+                    player["x_change"] = PLAYER_EVENT.get(event.key, 0)
 
-                if event.key == pygame.K_x:
-                    bullet["x"] = player["x"]
-                    bullet["y"] = player["y"]
-                    bullet["sound"].play()
-                    fire_bullet(bullet["x"], bullet["y"])
+                    if event.key == pygame.K_x:
+                        bullet["x"] = player["x"]
+                        bullet["y"] = player["y"]
+                        bullet["sound"].play()
+                        fire_bullet(bullet["x"], bullet["y"])
 
-            if event.type == pygame.KEYUP:
-                player["x_change"] = REST_EVENT.get(event.key, 0)
-
-                if event.key == pygame.K_c:
-                    player["x_change"] = 0
+                case pygame.KEYUP:
+                    player["x_change"] = REST_EVENT.get(event.key, 0)
 
         player["x"] += player["x_change"]
 
-        # Ship limit
+        # Ship collision
         if player["x"] <= 0:
             player["x"] = 0
 
@@ -166,9 +161,8 @@ def main():
                     enemy_y[u] = 2000
                     game_over_text()
                 # break
-
             # Spawn the ENEMY
-            display_entity(enemy.get("img"), (enemy_x[h], enemy_y[h]))
+            display_entity(enemy_img[h], (enemy_x[h], enemy_y[h]))
 
         # Bullet Movement
         if bullet["y"] <= 0:
