@@ -156,7 +156,7 @@ def main():
                 enemy_x[h] = random.randint(0, 600)
                 enemy_y[h] = random.randint(70, 150)
 
-            if enemy_y[h] > 450:
+            if enemy_y[h] > 1000:
                 for u in range(num_enemies):
                     enemy_y[u] = 2000
                     game_over_text()
